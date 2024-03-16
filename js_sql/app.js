@@ -3,28 +3,30 @@ import { Sequelize, DataTypes } from 'sequelize';
 import pkg from 'sequelize';
 const { Model } = pkg;
 
-const sequelize = new Sequelize('sqlite::memory:');
+const sequelize = new Sequelize("sqlite::memory:");
 
 const app = express();
 app.use(express.json());
+
+const PORT = 3000
 
 class User extends Model {}
 User.init({
     username: { type: DataTypes.STRING, allowNull: false },
     email: { type: DataTypes.STRING, allowNull: false },
     password: { type: DataTypes.STRING, allowNull: false },
-}, { sequelize, modelName: 'user' });
+}, { sequelize, modelName: "user" });
 
 class Post extends Model {}
 Post.init({
     title: { type: DataTypes.STRING, allowNull: false },
     content: { type: DataTypes.TEXT, allowNull: false },
-}, { sequelize, modelName: 'post' });
+}, { sequelize, modelName: "post" });
 
 class Comment extends Model {}
 Comment.init({
     content: { type: DataTypes.TEXT, allowNull: false },
-}, { sequelize, modelName: 'comment' });
+}, { sequelize, modelName: "comment" });
 
 User.hasMany(Post);
 Post.belongsTo(User);
@@ -44,5 +46,5 @@ app.post('/posts', async (req, res) => {
 });
 
 sequelize.sync().then(() => {
-    app.listen(3000, () => console.log('Server running on port 3000'));
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });
